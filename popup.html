@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-cn" ng-app="rocket">
+
+<head>
+    <meta charset="utf-8">
+    <title>Popup</title>
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/popup.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <div id="popup" class="">
+        <div class="">
+            <div class="container-fluid text-center pop_title width_100 margin_top_10" id="currentTabUrl">{{ currentTabUrl }}</div>
+            <div class="container-fluid margin_top_10">
+                <span type="button" class="btn btn-success pop_title width_100" v-show="!pageExists" @click="addCurPage">
+                        <span class="pull-left">将当前页面加入私有页面</span>
+                <span class="glyphicon glyphicon-plus-sign pull-right"></span>
+                </span>
+
+                <span role="group" class="btn-group pop_title width_100" v-show="pageExists">
+                        <span  type="button" class=" btn btn-default pop_title" disabled>当前网站已在私有列表</span>
+                <span type="button" class="btn btn-default glyphicon glyphicon-trash trash" @click="removeCurPage" data-toggle="tooltip" data-placement="left" title="从私有页面中移除"></span>
+                </span>
+            </div>
+        </div>
+
+        <div class="container-fluid margin_bottom_10 href_options margin_bottom_15" hrefToOptions>
+            <div type="button" class="btn {{personSetClass}} btn-xs pop_title">
+                <span class="pull-left" @click="gotoConfig">{{personSet}}<img id="img" class="hidden" src="/images/loading.gif"></span>
+            </div>
+            <span class="glyphicon glyphicon-menu-right pull-right pop_title cursor" @click="gotoConfig"></span>
+        </div>
+    </div>
+
+    <script src="lib/jquery/jquery-1.12.2.min.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="lib/md5.js"></script>
+    <script src="lib/vue.js"></script>
+    <script src="js/popup.js"></script>
+</body>
+
+</html

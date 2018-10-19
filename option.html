@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/option.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="option" class="container height_100per">
+        <div class="row height_100per">
+            <!--左侧部分 Start>
+            <div class="col-md-3 con-left height_100per">
+                <div class="container-fluid">
+                    <hr />
+                </div>
+                <div class="container-fluid">
+                    <div class="list-group">
+                        <a href="{{index_url}}" target="_blank" class="list-group-item">官网首页</a>
+                        <a href="{{instructions_url}}" target="_blank" class="list-group-item">无法使用？</a>
+                        <a href="{{index_url}}#email" target="_blank" class="list-group-item">联系我们</a>
+                    </div>
+                </div>
+
+            </div>
+            <!--左侧部分 End-->
+
+            <!--右侧部分 Start-->
+            <div class="col-md-12 con-right height_100per" style="overflow-y:scroll">
+                <div class="left_part1">
+
+                    <div class="container-fluid">
+                        <div v-show="true" class="alert alert-info text-center" role="alert">设置添加的Header的Key和Value</div>
+                    </div>
+
+                    <div class="container-fluid right_part2" style="margin-bottom: 15px">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" :value="privateKey" id="domainAdd" placeholder="请输入Key">
+
+                                    <div class="input-group-btn">
+                                        <input type="submit" value="Key" class="btn btn-success" webmanageradd>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" :value="privateValue" id="domainAdd" placeholder="请输入Value">
+
+                                    <div class="input-group-btn">
+                                        <input type="submit" value="Value" class="btn btn-success" webmanageradd>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2 margin-20">
+                                <input type="submit" value="一键恢复初始值" class="btn btn-warning modaldefault" data-toggle="modal" data-target="#confirmDefault">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="container-fluid">
+                        <div v-show="true" class="alert alert-info text-center" role="alert">将需要私有访问的页面添加到这里, 对以下页面进行私有访问</div>
+                        <div v-show="isShow == true" class="alert alert-danger text-center" role="alert"><b>您输入的页面地址不合法!</div>
+                        <div v-show="isSuccess == true" class="alert alert-success text-center" role="alert"><b>操作成功!</b></div>
+                    </div>
+
+
+
+                    <!--右2部分:添加表单-->
+                    <div class="container-fluid right_part2">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="domainAdd" placeholder="请输入页面地址，按回车添加">
+
+                                    <div class="input-group-btn">
+                                        <input type="submit" value="添加页面" class="btn btn-success" webmanageradd>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-fluid right_part2_2">
+                        <span>在访问下面的页面时,扩展会添加认证的头部来通过验证<span>
+                    </div>
+
+                    <div class="container-fluid right3">
+                        <div class="row">
+                            <div class="col-md-12" webmanager>
+                                <div class="web-name" v-for="page in pageList" :key="page">
+                                <a :href="page" target="_blank">{{ page | ellipsis }}</a>
+                                <span class="pull-right glyphicon glyphicon-trash trash"  @click="removePage(page)"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!--右侧部分 End-->
+
+    <div class="{{tab2}}">
+        <div class="container-fluid right_part1">
+
+            <div class="row">
+                <div class="container-fluid">
+                    <hr />
+                </div>
+                <div class="col-md-12" style="line-height: 35px; margin-top:20px;">
+                    <b style="font-size: 16px;">分享到社交网络：</b><br/>
+                    <textarea id="shareContent" rows="2" style=" width:100%;border: 1px solid #cccccc;padding:10px; color:#666;">{{fenxiang}}</textarea>
+                    <br/>
+                    <b>分享:</b>
+
+
+                    <a class="btn  btn-danger" style="margin-left: 10px;" target="_blank" href="http://service.weibo.com/share/share.php?title={{fenxiang_encode}}">分享到新浪微博</a>
+                    <a class="btn  btn-danger" style="margin-left: 10px;" target="_blank" href="http://shuo.douban.com/!service/share?href=http://{{websiteurl}}/?r%3D{{emailshow}}&name={{fenxiang_encode}}">分享到豆瓣</a>
+                    <a class="btn  btn-danger" style="margin-left: 10px;" target="_blank" href="http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://{{websiteurl}}/?r%3D{{emailshow}}&title={{fenxiang_encode}}">分享到QQ空间</a>
+                    <a class="btn  btn-danger" style="margin-left: 10px;" target="_blank" href="http://share.v.t.qq.com/index.php?c=share&amp;a=index&amp;url=http://{{websiteurl}}/?r%3D{{emailshow}}&amp;title={{fenxiang_encode}}">分享到腾讯微博</a>
+                    <a class="btn  btn-danger" style="margin-left: 10px;" target="_blank" href="http://widget.renren.com/dialog/share?url=http://{{websiteurl}}/?r%3D{{emailshow}}&amp;title={{fenxiang_encode}}&amp;pic=http://{{websiteurl}}/index/views/default/ued/images/domecross/logos/logo.png&amp;description=悄悄的访问自己的页面！">分享到人人网</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    </div>
+    </div>
+    <!--确认恢复系统默认-->
+    <div class="modal fade " id="confirmDefault" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabel">操作确认</h4>
+                </div>
+                <div class="modal-body">
+                    您确认恢复为默认值吗?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" webmanagerdefault>确认修改</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--删除Page-->
+    <div class="modal fade " id="removePage" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabel">操作确认</h4>
+                </div>
+                <div class="modal-body">
+                    是否要删除页面<strong>{{ tmpPage }}</strong> ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" @click="removePage1">确认删除</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+
+    <script src="lib/jquery/jquery-1.12.2.min.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="lib/md5.js"></script>
+    <script src="lib/vue.js"></script>
+    <script src="js/option.js"></script>
+
+</body>
+
+</html>
