@@ -11,11 +11,20 @@ var app = new Vue({
         emailshow: '',
         websiteurl: '',
         tmpPage: '',
+        showDiv: 'main',
+        phpCode: ""
     },
     created() {
-        this.privateKey = localStorage.getItem('private_key') || 'PrivateKey';
-        this.privateValue = localStorage.getItem('private_value') || 'Dream';
+        this.privateKey = localStorage.getItem('private_key') || 'privatepage';
+        this.privateValue = localStorage.getItem('private_value') || 'ctwj';
         this.pageList = JSON.parse(localStorage.getItem('private_list')) || [];
+        this.phpCode = `<?php 
+        if (! isset($_SERVER["HTTP_${this.privateKey.toUpperCase()}"]) || $_SERVER["HTTP_${this.privateKey.toUpperCase()}"] =="${this.privateValue}"  ) {
+            Header("HTTP/1.1 404 Not Found"); 
+            die();
+        }
+        phpinfo();
+    ?></pre></code>`;
     },
     methods: {
         removePage(page) {
@@ -29,6 +38,17 @@ var app = new Vue({
                 chrome.runtime.sendMessage({ operation: "removePage", page: this.tmpPage }, () => {})
             }
             $('#removePage').modal('hide');
+        },
+        changeDiv(div) {
+            this.showDiv = div;
+        },
+        modifyCode() {
+            this.$nextTick(function() {
+                let blocks = document.querySelectorAll("pre code");
+                blocks.forEach(block => {
+                    hljs.highlightBlock(block);
+                });
+            });
         }
     },
     filter: {

@@ -11,16 +11,16 @@
 <body>
     <div id="option" class="container height_100per">
         <div class="row height_100per">
-            <!--左侧部分 Start>
+            <!--左侧部分 Start-->
             <div class="col-md-3 con-left height_100per">
                 <div class="container-fluid">
                     <hr />
                 </div>
                 <div class="container-fluid">
                     <div class="list-group">
-                        <a href="{{index_url}}" target="_blank" class="list-group-item">官网首页</a>
-                        <a href="{{instructions_url}}" target="_blank" class="list-group-item">无法使用？</a>
-                        <a href="{{index_url}}#email" target="_blank" class="list-group-item">联系我们</a>
+                        <a @click="changeDiv('main')" class="list-group-item">首页</a>
+                        <a @click="changeDiv('instructions')" target="_blank" class="list-group-item">无法使用？</a>
+                        <a @click="changeDiv('')" target="_blank" class="list-group-item">联系我们</a>
                     </div>
                 </div>
 
@@ -28,8 +28,8 @@
             <!--左侧部分 End-->
 
             <!--右侧部分 Start-->
-            <div class="col-md-12 con-right height_100per" style="overflow-y:scroll">
-                <div class="left_part1">
+            <div class="col-md-9 con-right height_100per" style="overflow-y:scroll">
+                <div class="left_part1" v-show="showDiv == 'main'">
 
                     <div class="container-fluid">
                         <div v-show="true" class="alert alert-info text-center" role="alert">设置添加的Header的Key和Value</div>
@@ -90,19 +90,63 @@
 
                     <div class="container-fluid right3">
                         <div class="row">
-                            <div class="col-md-12" webmanager>
-                                <div class="web-name" v-for="page in pageList" :key="page">
-                                <a :href="page" target="_blank">{{ page | ellipsis }}</a>
-                                <span class="pull-right glyphicon glyphicon-trash trash"  @click="removePage(page)"></span>
+                            <div class="col-md-12">
+                                    <div class="web-name" v-for="page in pageList" :key="page">
+                                            <a :href="page" target="_blank">{{ page | ellipsis }}</a>
+                                            <span class="pull-right glyphicon glyphicon-trash trash"  @click="removePage(page)"></span>
                     </div>
                 </div>
             </div>
         </div>
 
     </div>
-    <!--右侧部分 End-->
+    <!-- left_part1 -->
+    <!-- left_part2 start-->
+    <div class="left_part2" v-show="showDiv=='instructions'">
+        <!-- <div class="container-fluid">
+            <div v-show="true" class="alert alert-info text-center" role="alert">原理说明</div>
+        </div> -->
 
-    <div class="{{tab2}}">
+        <div class="container-fluid right_part2" style="margin-bottom: 15px">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-header">
+                        <h1>说明 <small>about privatepage</small></h1>
+                    </div>
+                    <p>
+                        1. HTTP Response header <br>
+                        <div class="alert alert-info text-center" role="alert">HTTP中文名为超文本传输协议, 在请求一个页面时， 会附带一些头部信息，就是 HTTP Response header, 通常浏览器会自动设置一些header。 其中比较出名的为 UserAgent , 服务器可以通过该字段判断，用户的浏览器类型。 除此之外，header中还能读取到各种相关信息， 通常访问网页是，用户并不用关心header。</div>
+                    </p>
+
+                    <p>
+                        2. 服务器验证 <br>
+                        <div class="alert alert-info text-center" role="alert">当前后台服务语言，百花齐放，但是HTTP协议是不变的， 可以加入同样的检测逻辑。</div>
+                    </p>
+
+                    <p>
+                        3. PrivatePage 原理 <br>
+                        <div class="alert alert-info text-center" role="alert">在后台服务器语言中， 添加一个Header验证。PrivatePage 会在请求的时候，自动附加这个Header，以通过验证. 而正常浏览器和扫描工具都不会添加header的。所以，正常情况下，页面都不能打开页面，只有使用扩展的时候， 或者自己编程，添加该header后，才能正常显示。</div>
+                    </p>
+                    <p>
+                        后端怎么检测？
+                        <a class="btn btn-primary" role="button" data-toggle="collapse" href="#php" aria-expanded="true" aria-controls="php">
+                                PHP Example
+                              </a>
+
+                        <div class="collapse" id="php">
+                            <p>{{phpCode}}</p>
+                        </div>
+                    </p>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- left_part2 end-->
+    </div>
+    <!-- con-right -->
+    <div class="">
         <div class="container-fluid right_part1">
 
             <div class="row">
@@ -114,8 +158,6 @@
                     <textarea id="shareContent" rows="2" style=" width:100%;border: 1px solid #cccccc;padding:10px; color:#666;">{{fenxiang}}</textarea>
                     <br/>
                     <b>分享:</b>
-
-
                     <a class="btn  btn-danger" style="margin-left: 10px;" target="_blank" href="http://service.weibo.com/share/share.php?title={{fenxiang_encode}}">分享到新浪微博</a>
                     <a class="btn  btn-danger" style="margin-left: 10px;" target="_blank" href="http://shuo.douban.com/!service/share?href=http://{{websiteurl}}/?r%3D{{emailshow}}&name={{fenxiang_encode}}">分享到豆瓣</a>
                     <a class="btn  btn-danger" style="margin-left: 10px;" target="_blank" href="http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://{{websiteurl}}/?r%3D{{emailshow}}&title={{fenxiang_encode}}">分享到QQ空间</a>
@@ -126,14 +168,14 @@
 
         </div>
     </div>
-    </div>
-    </div>
     <!--确认恢复系统默认-->
     <div class="modal fade " id="confirmDefault" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                        </button>
                     <h4 class="modal-title" id="exampleModalLabel">操作确认</h4>
                 </div>
                 <div class="modal-body">
@@ -167,13 +209,19 @@
     </div>
 
     </div>
+    <!--右侧部分 End-->
+
+
+    </div>
+    </div>
+
 
     <script src="lib/jquery/jquery-1.12.2.min.js"></script>
     <script src="lib/bootstrap/js/bootstrap.min.js"></script>
     <script src="lib/md5.js"></script>
+    <script src="lib/highlight.min.js"></script>
     <script src="lib/vue.js"></script>
     <script src="js/option.js"></script>
-
 </body>
 
 </html>

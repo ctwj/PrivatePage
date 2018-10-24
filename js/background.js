@@ -1,11 +1,11 @@
 /**
  * key
  */
-let privateKey = localStorage.getItem('private_key') || 'help_me';
+let privateKey = localStorage.getItem('private_key') || 'privatepage';
 /**
  * value
  */
-let privateValue = localStorage.getItem('private_value') || 'I_am_here';
+let privateValue = localStorage.getItem('private_value') || 'ctwj';
 /**
  * list
  */
