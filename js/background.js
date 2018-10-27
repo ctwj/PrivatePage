@@ -17,18 +17,10 @@ let checkList = JSON.parse(localStorage.getItem('private_list')) || [];
  * 网络监听
  */
 chrome.webRequest.onBeforeSendHeaders.addListener((details) => {
-    console.log(details);
     let request_headers = details.requestHeaders;
     let { protocol, hostname, pathname } = new URL(details.url);
-    console.log(`${protocol}//${hostname}${pathname}`);
     if (checkList.includes(`${protocol}//${hostname}${pathname}`)) {
-        console.log('d');
-        console.log(request_headers);
         request_headers.push({ 'name': privateKey, 'value': privateValue });
-        // let pos = response_headers.length;
-        // response_headers[pos].name = privateKey;
-        // response_headers[pos].value = privateValue;
-        console.log(request_headers);
         return { requestHeaders: request_headers };
     }
 
@@ -72,4 +64,20 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         return;
     }
 
+});
+
+/**
+ * 加载页面时，设置图标
+ */
+chrome.tabs.onUpdated.addListener((id, info, tab) => {
+    // console.log(id, info, tab);
+    if (tab.status === 'loading') {
+        let { protocol, hostname, pathname } = new URL(tab.url);
+        if (checkList.includes(`${protocol}//${hostname}${pathname}`)) {
+            chrome.browserAction.setIcon({ path: '/images/unlock.png', tabId: tab.id });
+        }
+        // {
+        //     chrome.browserAction.setIcon({ path: '/images/lock.png', tabId: tab.id });
+        // }
+    }
 });

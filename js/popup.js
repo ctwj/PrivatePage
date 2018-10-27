@@ -3,14 +3,14 @@ var app = new Vue({
     data: {
         pageExists: false,
         currentTabUrl: '',
-        personSet: '使用说明',
+        personSet: '设置',
         page: ''
     },
     created() {
         chrome.tabs.getSelected(null, (tab) => {
-            let uri = new URL(tab.url);
-            this.page = `${uri.protocol}//${uri.hostname}${uri.pathname}`;
-            this.currentTabUrl = uri.pathname;
+            let { protocol, hostname, pathname } = new URL(tab.url);
+            this.page = `${protocol}//${hostname}${pathname}`;
+            this.currentTabUrl = `${hostname}${pathname}`
 
             let list = localStorage.getItem('private_list') || [];
             this.pageExists = list.includes(this.page);
