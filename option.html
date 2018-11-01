@@ -13,17 +13,19 @@
         <div class="row height_100per">
             <!--左侧部分 Start-->
             <div class="col-md-3 con-left height_100per">
+                <div class="left_part1 container-fluid">
+                    <div class="left_tit pull-left"><b>{{name}}</b> <small>{{version}}</small></div>
+                </div>
                 <div class="container-fluid">
                     <hr />
                 </div>
                 <div class="container-fluid">
                     <div class="list-group">
-                        <a @click="changeDiv('main')" class="list-group-item">首页</a>
-                        <a @click="changeDiv('instructions')" target="_blank" class="list-group-item">无法使用？</a>
-                        <a @click="changeDiv('')" target="_blank" class="list-group-item">联系我们</a>
+                        <a @click="changeDiv('main')" :class="showDiv=='main' ? 'active':''" class="list-group-item">首页</a>
+                        <a @click="changeDiv('instructions')" :class="showDiv=='instructions' ? 'active':''" target="_blank" class="list-group-item">无法使用？</a>
+                        <a @click="changeDiv('touch')" :class="showDiv=='touch' ? 'active':''" target="_blank" class="list-group-item">关于扩展</a>
                     </div>
                 </div>
-
             </div>
             <!--左侧部分 End-->
 
@@ -39,24 +41,25 @@
                         <div class="row">
                             <div class="col-md-5">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" :value="privateKey" id="domainAdd" placeholder="请输入Key">
+                                    <input type="text" class="form-control" v-model="privateKey" id="domainAdd" placeholder="请输入Key">
 
                                     <div class="input-group-btn">
-                                        <input type="submit" value="Key" class="btn btn-success" webmanageradd>
+                                        <input type="submit" value="Key" class="btn btn-success">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-5">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" :value="privateValue" id="domainAdd" placeholder="请输入Value">
+                                    <input type="text" class="form-control" v-model="privateValue" id="domainAdd" placeholder="请输入Value">
 
                                     <div class="input-group-btn">
-                                        <input type="submit" value="Value" class="btn btn-success" webmanageradd>
+                                        <input type="submit" value="Value" class="btn btn-success">
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-2 margin-20">
-                                <input type="submit" value="一键恢复初始值" class="btn btn-warning modaldefault" data-toggle="modal" data-target="#confirmDefault">
+
+                            <div class="col-md-2">
+                                <input type="submit" value="设置" class="btn btn-warning modaldefault" data-toggle="modal" data-target="#setKeyValue">
                             </div>
                         </div>
                     </div>
@@ -92,7 +95,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                     <div class="web-name" v-for="page in pageList" :key="page">
-                                            <a :href="page" target="_blank">{{ page | ellipsis }}</a>
+                                            <a :href="page" :title="page" target="_blank">{{ page }}</a>
                                             <span class="pull-right glyphicon glyphicon-trash trash"  @click="removePage(page)"></span>
                     </div>
                 </div>
@@ -144,9 +147,35 @@
         </div>
     </div>
     <!-- left_part2 end-->
+    <!-- left_part3 start-->
+    <div class="left_part3" v-show="showDiv=='touch'">
+        <!-- <div class="container-fluid">
+            <div v-show="true" class="alert alert-info text-center" role="alert">原理说明</div>
+        </div> -->
+
+        <div class="container-fluid right_part3" style="margin-bottom: 15px">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-header">
+                        <h2>Github <small>source code</small></h2>
+                    </div>
+                    <p>
+                        <a href="https://github.com/ctwj/PrivatePage" target="_blank" title="源码">https://github.com/ctwj/PrivatePage</a>
+                    </p>
+                    <div class="page-header">
+                        <h2>官网 <small></small></h2>
+                    </div>
+                    <p>
+                        <a href="https://www.safecode.cc" target="_blank" title="源码">https://www.safecode.cc</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- left_part3 end-->
     </div>
     <!-- con-right -->
-    <div class="">
+    <!-- <div class="">
         <div class="container-fluid right_part1">
 
             <div class="row">
@@ -167,9 +196,9 @@
             </div>
 
         </div>
-    </div>
+    </div> -->
     <!--确认恢复系统默认-->
-    <div class="modal fade " id="confirmDefault" tabindex="-1" role="dialog">
+    <div class="modal fade " id="setKeyValue" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -179,11 +208,11 @@
                     <h4 class="modal-title" id="exampleModalLabel">操作确认</h4>
                 </div>
                 <div class="modal-body">
-                    您确认恢复为默认值吗?
+                    确认要设置Key和Value吗?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary" webmanagerdefault>确认修改</button>
+                    <button type="button" class="btn btn-primary" @click="setKeyValue">确认修改</button>
                 </div>
             </div>
         </div>

@@ -12,7 +12,9 @@ var app = new Vue({
         websiteurl: '',
         tmpPage: '',
         showDiv: 'main',
-        phpCode: ""
+        phpCode: "",
+        version: "",
+        name: ""
     },
     created() {
         this.privateKey = localStorage.getItem('private_key') || 'privatepage';
@@ -25,6 +27,10 @@ var app = new Vue({
         }
         phpinfo();
     ?></pre></code>`;
+        let { name, version } = chrome.app.getDetails();
+        this.version = version;
+        this.name = name;
+
     },
     methods: {
         removePage(page) {
@@ -49,14 +55,18 @@ var app = new Vue({
                     hljs.highlightBlock(block);
                 });
             });
+        },
+        setKeyValue() {
+            localStorage.setItem('private_key', this.privateKey);
+            localStorage.setItem('private_value', this.privateValue);
+            $('#setKeyValue').modal('hide');
         }
     },
-    filter: {
+    filters: {
         ellipsis(value) {
-            console.log('a')
             if (!value) return ''
-            if (value.length > 8) {
-                return value.slice(0, 8) + '...'
+            if (value.length > 25) {
+                return value.slice(0, 25) + '...'
             }
             return value
         }

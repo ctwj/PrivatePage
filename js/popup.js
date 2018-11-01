@@ -27,6 +27,9 @@ var app = new Vue({
         removeCurPage() {
             this.pageExists = !this.pageExists;
             chrome.runtime.sendMessage({ operation: "removePage", page: this.page }, () => {})
+        },
+        github() {
+            chrome.tabs.create({ url: "https://github.com/ctwj/PrivatePage" });
         }
     }
 })

@@ -12,7 +12,7 @@
 <body>
     <div id="popup" class="">
         <div class="">
-            <div class="container-fluid text-center pop_title width_100 margin_top_10" id="currentTabUrl">{{ currentTabUrl }}</div>
+            <div class="container-fluid text-center pop_title width_100 margin_top_10" id="currentTabUrl">{{ currentTabUrl | ellipsis }}</div>
             <div class="container-fluid margin_top_10">
                 <span type="button" class="btn btn-success pop_title width_100" v-show="!pageExists" @click="addCurPage">
                         <span class="pull-left">将当前页面加入私有页面</span>
@@ -23,6 +23,15 @@
                         <span  type="button" class=" btn btn-default pop_title" disabled>当前网站已在私有列表</span>
                 <span type="button" class="btn btn-default glyphicon glyphicon-trash trash" @click="removeCurPage" data-toggle="tooltip" data-placement="left" title="从私有页面中移除"></span>
                 </span>
+            </div>
+        </div>
+
+        <div class="">
+            <div class="container-fluid margin_top_10">
+                <button type="button" @click="github" class="btn btn-default btn-backgrown pop_title width_100">
+                    <span class=""></span><b>项目地址</b></span>
+                    <span class="glyphicon glyphicon-circle-arrow-left pull-left"></span>
+                </button>
             </div>
         </div>
 
@@ -41,4 +50,4 @@
     <script src="js/popup.js"></script>
 </body>
 
-</html
+</html>
