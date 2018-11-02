@@ -61,14 +61,5 @@ var app = new Vue({
             localStorage.setItem('private_value', this.privateValue);
             $('#setKeyValue').modal('hide');
         }
-    },
-    filters: {
-        ellipsis(value) {
-            if (!value) return ''
-            if (value.length > 25) {
-                return value.slice(0, 25) + '...'
-            }
-            return value
-        }
     }
 })

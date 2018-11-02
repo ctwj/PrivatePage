@@ -11,7 +11,7 @@
         }
     },
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
-    "description": "给指定页面，添加header，进行验证.",
+    "description": "通过向请求添加一个Header来达到验证的目的,要求是代码里面添加相应处理,处理好后通过扩展添加后能正常打开其他方式都无法访问.",
     "icons": {
         "128": "images/logo.png",
         "16": "images/logo.png",
@@ -19,6 +19,6 @@
     },
     "manifest_version": 2,
     "name": "PrivatePage",
-    "permissions": ["management", "idle", "tabs", "cookies", "notifications", "webRequest", "webRequestBlocking", "http://*/", "https://*/", "<all_urls>"],
+    "permissions": ["tabs", "webRequest", "webRequestBlocking", "http://*/", "https://*/"],
     "version": "1.0.0"
 }

@@ -31,5 +31,14 @@ var app = new Vue({
         github() {
             chrome.tabs.create({ url: "https://github.com/ctwj/PrivatePage" });
         }
+    },
+    filters: {
+        ellipsis(value) {
+            if (!value) return ''
+            if (value.length > 25) {
+                return value.slice(0, 25) + '...'
+            }
+            return value
+        }
     }
 })
