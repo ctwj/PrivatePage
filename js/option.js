@@ -1,9 +1,10 @@
 var app = new Vue({
     el: '#option',
     data: {
-        privateKey: '',
-        privateValue: '',
-        pageList: [],
+        privateKey: '', //通用key
+        privateValue: '', //用用value
+        pageList: [], //页面列表
+        configList: [], //配置列表
         isShow: false,
         isSuccess: false,
         fenxiang: '',
@@ -17,9 +18,14 @@ var app = new Vue({
         name: ""
     },
     created() {
+        // 读取通用配置
         this.privateKey = localStorage.getItem('private_key') || 'privatepage';
         this.privateValue = localStorage.getItem('private_value') || 'ctwj';
+        // 页面列表
         this.pageList = JSON.parse(localStorage.getItem('private_list')) || [];
+        // 配置列表
+        this.configList = JSON.parse(localStorage.getItem('config_list')) || [];
+
         this.phpCode = `<?php 
         if (! isset($_SERVER["HTTP_${this.privateKey.toUpperCase()}"]) || $_SERVER["HTTP_${this.privateKey.toUpperCase()}"] =="${this.privateValue}"  ) {
             Header("HTTP/1.1 404 Not Found"); 
@@ -27,6 +33,7 @@ var app = new Vue({
         }
         phpinfo();
     ?></pre></code>`;
+
         let { name, version } = chrome.app.getDetails();
         this.version = version;
         this.name = name;
@@ -60,6 +67,11 @@ var app = new Vue({
             localStorage.setItem('private_key', this.privateKey);
             localStorage.setItem('private_value', this.privateValue);
             $('#setKeyValue').modal('hide');
+        },
+        updatePage(page, index) {
+            let key = $(`#key${index}`).val();
+            let value = $(`#value${index}`).val();
+            chrome.runtime.sendMessage({ operation: "updatePgae", 'page': page, 'key': key, 'val': value }, () => {});
         }
     }
 })

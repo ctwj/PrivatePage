@@ -4,9 +4,14 @@ var app = new Vue({
         pageExists: false,
         currentTabUrl: '',
         personSet: '设置',
-        page: ''
+        page: '',
+        privateKey: '',
+        privateValue: ''
     },
     created() {
+        this.privateKey = localStorage.getItem('private_key') || 'privatepage';
+        this.privateValue = localStorage.getItem('private_value') || 'ctwj';
+
         chrome.tabs.getSelected(null, (tab) => {
             let { protocol, hostname, pathname } = new URL(tab.url);
             this.page = `${protocol}//${hostname}${pathname}`;
@@ -22,7 +27,7 @@ var app = new Vue({
         },
         addCurPage() {
             this.pageExists = !this.pageExists;
-            chrome.runtime.sendMessage({ operation: "addPage", page: this.page }, () => {})
+            chrome.runtime.sendMessage({ operation: "addPage", page: this.page, 'key': this.privateKey, 'val': this.privateValue }, () => {})
         },
         removeCurPage() {
             this.pageExists = !this.pageExists;

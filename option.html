@@ -74,7 +74,7 @@
 
 
                     <!--右2部分:添加表单-->
-                    <div class="container-fluid right_part2">
+                    <!--<div class="container-fluid right_part2">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="input-group">
@@ -86,7 +86,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>-->
                     <div class="container-fluid right_part2_2">
                         <span>在访问下面的页面时,扩展会添加认证的头部来通过验证<span>
                     </div>
@@ -94,13 +94,41 @@
                     <div class="container-fluid right3">
                         <div class="row">
                             <div class="col-md-12">
-                                    <div class="web-name" v-for="page in pageList" :key="page">
-                                            <a :href="page" :title="page" target="_blank">{{ page }}</a>
-                                            <span class="pull-right glyphicon glyphicon-trash trash"  @click="removePage(page)"></span>
+                                <div class="page" v-for="page,index in pageList" :key="page">
+                                        <div class="web-name" data-toggle="collapse" :data-target="'#'+index" aria-expanded="false" :aria-controls="page" >
+                                                <a :href="page" :title="page" target="_blank">{{ page }}</a>
+                                                <span class="pull-right glyphicon glyphicon-trash trash" @click="removePage(page)"></span>
+                    </div>
+                    <div class="collapse" :id="index">
+                        <div class="well">
+                            <div class="col-lg-5 col-md-5 col-sm-5">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        Key
+                                    </span>
+                                    <input type="text" :id="'key'+index" :value="configList[page].key" class="form-control" aria-label="...">
+                                </div>
+                            </div>
+                            <div class="col-lg-5 col-md-5 col-sm-5">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        Value
+                                    </span>
+                                    <input type="text" :id="'value'+index" :value="configList[page].value" class="form-control" aria-label="...">
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-2">
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateKV" @click="updatePage(page,index)">
+                                    更新
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
+    </div>
 
     </div>
     <!-- left_part1 -->
@@ -236,6 +264,26 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="updateKV" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">提示</h4>
+                </div>
+                <div class="modal-body">
+                    <p>更新成功！</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">确定</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
 
     </div>
     <!--右侧部分 End-->

@@ -10,6 +10,10 @@ let privateValue = localStorage.getItem('private_value') || 'ctwj';
  * list
  */
 let checkList = JSON.parse(localStorage.getItem('private_list')) || [];
+/**
+ * config list
+ */
+let configList = JSON.parse(localStorage.getItem('config_list')) || {};
 
 
 
@@ -19,8 +23,9 @@ let checkList = JSON.parse(localStorage.getItem('private_list')) || [];
 chrome.webRequest.onBeforeSendHeaders.addListener((details) => {
     let request_headers = details.requestHeaders;
     let { protocol, hostname, pathname } = new URL(details.url);
-    if (checkList.includes(`${protocol}//${hostname}${pathname}`)) {
-        request_headers.push({ 'name': privateKey, 'value': privateValue });
+    let hash = `${protocol}//${hostname}${pathname}`;
+    if (checkList.includes(hash)) {
+        request_headers.push({ 'name': configList[hash].key, 'value': configList[hash].value });
         return { requestHeaders: request_headers };
     }
 
@@ -39,9 +44,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
     // 添加url
     if (operation === 'addPage') {
+        let { key, val } = request;
         if (!checkList.includes(page)) {
             checkList.push(page);
             localStorage.setItem('private_list', JSON.stringify(checkList));
+
+            configList[page] = { 'key': key, 'value': val };
+            localStorage.setItem('config_list', JSON.stringify(configList));
         }
         sendResponse({ result: 'ok' })
         return;
@@ -53,9 +62,19 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         if (checkList.includes(page)) {
             checkList.splice(checkList.indexOf(page), 1);
             localStorage.setItem('private_list', JSON.stringify(checkList));
+
+            delete configList[page];
+            localStorage.setItem('config_list', JSON.stringify(configList));
         }
         sendResponse({ result: 'ok' })
         return;
+    }
+
+    // 更新密码
+    if (operation === 'updatePgae') {
+        let { key, val } = request;
+        configList[page] = { 'key': key, 'value': val };
+        localStorage.setItem('config_list', JSON.stringify(configList));
     }
 
     // 设置新的KeyValue
@@ -80,4 +99,4 @@ chrome.tabs.onUpdated.addListener((id, info, tab) => {
         //     chrome.browserAction.setIcon({ path: '/images/lock.png', tabId: tab.id });
         // }
     }
-});
+})
