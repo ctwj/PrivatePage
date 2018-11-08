@@ -140,6 +140,10 @@ body {
     -webkit-animation: shake 2s 0.5s 2 linear;
 }
 
+.page {
+    margin-bottom: 5px;
+}
+
 @-webkit-keyframes shake {
     50% {
         left: 0;
