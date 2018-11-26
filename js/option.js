@@ -27,12 +27,15 @@ var app = new Vue({
         this.configList = JSON.parse(localStorage.getItem('config_list')) || [];
 
         this.phpCode = `<?php 
-        if (! isset($_SERVER["HTTP_${this.privateKey.toUpperCase()}"]) || $_SERVER["HTTP_${this.privateKey.toUpperCase()}"] =="${this.privateValue}"  ) {
-            Header("HTTP/1.1 404 Not Found"); 
+        // =================================== 从第二行开始添加
+        if ( !isset($_SERVER["HTTP_${this.privateKey.toUpperCase()}"]) || $_SERVER["HTTP_${this.privateKey.toUpperCase()}"] 
+		!="${this.privateValue}" ) {
+            header("HTTP/1.1 404 Not Found"); 
             die();
         }
+        // =================================== 添加结束
         phpinfo();
-    ?></pre></code>`;
+    ?>`;
 
         let { name, version } = chrome.app.getDetails();
         this.version = version;
